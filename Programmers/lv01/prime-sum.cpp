@@ -1,4 +1,5 @@
-#if 0
+#include "../test-prog.h"
+#if (PNUM == lv01-1)
 #include <iostream>
 
 using namespace std;
@@ -14,7 +15,6 @@ int main() {
 	for (int i = 2; i <= N;i++) {
 		isPrime[i] = true;
 	}
-	//이거 대신에 bool isPrime[10000001] = {false,}; 가능함
 
 	for (int i = 2; i <= N; i++) {
 		if (isPrime[i]) {
