@@ -1,6 +1,5 @@
 #include "test.h"
-//#if (PNUM == 3411)
-#if 1
+#if (PNUM == 3411)
 #include <stdio.h>
 
 int a[3][4] = { {1,2,3,4},{5,6,7,8},{9,10,11,12} };
