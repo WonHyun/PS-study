@@ -1281,9 +1281,20 @@ void main(void)
 
 #if 1
 
+//버퍼에 리스트의 자료를 복사
 int Copy_All_Node(SCORE * head, SCORE * buf)
 {
-    
+    int i;
+    if (head->next == NULL) return -1;
+
+    for (i = 0; i < MAX_ST; i++) {
+        if (head->next == NULL) break;
+        buf[i] = *head->next;
+        buf[i].next = &buf[i + 1];
+        head = head->next;
+    }
+    buf[i - 1].next = NULL;
+    return i;
 }
 
 #endif
