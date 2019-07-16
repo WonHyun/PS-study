@@ -1244,6 +1244,7 @@ int Delete_Node(SCORE * head, int id)
             head->next = head->next->next;
             return 1;
         }
+        if (head->next->id > id) return -1;
         head = head->next;
     }
     return -1;
@@ -1278,15 +1279,11 @@ void main(void)
 // [1-3.9] 주어진 버퍼에 자료를 모두 복사해 주는 함수 
 /***********************************************************/
 
-#if 0
+#if 1
 
 int Copy_All_Node(SCORE * head, SCORE * buf)
 {
-
-
-
-
-
+    
 }
 
 #endif
