@@ -2491,18 +2491,15 @@ int Sptr = STACK_EMPTY;
 int Push_Stack(int data)
 {
     if (Sptr == STACK_FULL) return -1;
-    Stack[Sptr] = data;
-    Sptr--;
+    Stack[--Sptr] = data;
     return 1;
 }
 
 int Pop_Stack(int *p)
 {
-    int data;
     if (Sptr == STACK_EMPTY) return -1;
-    data = Stack[Sptr];
-    Sptr++;
-    return data;
+    *p = Stack[Sptr++];
+    return 1;
 }
 
 int Print_Stack(void)
