@@ -907,7 +907,7 @@ void main(void)
 // [1-3] 배열 기반 연결 리스트
 /***********************************************************/
 
-#if 1
+#if 0
 
 /***********************************************************/
 // [1-3.1] 데이터 모델링
@@ -1420,13 +1420,13 @@ void main(void)
 // [1-4] 배열 기반 연결 리스트 - 다중 링크
 /***********************************************************/
 
-#if 0
+#if 1
 
 /***********************************************************/
 // [1-4.1] 데이터 모델링
 /***********************************************************/
 
-#if 0
+#if 1
 
 #include <stdio.h>
 #include <string.h>
@@ -1568,15 +1568,34 @@ int Insert_Data(SCORE * p)
 // [1-4.2] 데이터 하나를 생성하여 Linked List에 추가하는 함수
 /***********************************************************/
 
-#if 0
+#if 1
 
 int Insert_Node(SCORE * head, SCORE * d)
 {
+    SCORE* temp = head;
+    if (Count_Node(head) == MAX_ST) return -1;
+    for (;;) {
+        if (head->nid == NULL || d->id < head->nid->id) {
+            d->nid = head->nid;
+            head->nid = d;
+            break;
+        }
+        if (d->id == head->nid->id) return -2;
+        head = head->nid;
+    }
 
+    head = temp;
 
+    for (;;) {
+        if (head->njumsu == NULL || d->jumsu <= head->njumsu->jumsu) {
+            d->njumsu = head->njumsu;
+            head->njumsu = d;
+            return 1;
+        }
+        head = head->njumsu;
+    }
 
-
-
+    return -1;
 }
 
 #endif
@@ -1606,7 +1625,7 @@ void main(void)
 // [1-4.4] link에 따라서 주어진 사번에 맞는 노드 를 찾아 주소를 리턴하는 함수
 /***********************************************************/
 
-#if 0
+#if 1
 
 int Print_All_Node(SCORE * head)
 {
@@ -1616,36 +1635,44 @@ int Print_All_Node(SCORE * head)
 
 int Print_All_Id_Node(SCORE * head)
 {
-
-
-
-
-
+    int i;
+    for (i = 0; i < MAX_ST; i++) {
+        if (head->nid == NULL) return i;
+        printf("addr = 0x%.8X, ID=%d, NAME=%s, SCORE=%d, nid = 0x%.8X\n",
+            head->nid, head->nid->id, head->nid->name, head->nid->jumsu, head->nid->nid);
+        head = head->nid;
+    }
+    return i;
 }
 
 int Print_All_Jumsu_Node(SCORE * head)
 {
-
-
-
-
-
+    int i;
+    for (i = 0; i < MAX_ST; i++) {
+        if (head->njumsu == NULL) return i;
+        printf("addr = 0x%.8X, ID=%d, NAME=%s, SCORE=%d, njumsu = 0x%.8X\n",
+            head->njumsu, head->njumsu->id, head->njumsu->name, head->njumsu->jumsu, head->njumsu->nid);
+        head = head->njumsu;
+    }
+    return i;
 }
 
 SCORE * Search_Id_Node(SCORE * head, int id)
 {
-
-
-
-
+    for (;;) {
+        if (head->nid == NULL) return NULL;
+        if (head->nid->id == id) return head->nid;
+        head = head->nid;
+    }
 }
 
 SCORE * Search_Jumsu_Node(SCORE * head, int jumsu)
 {
-
-
-
-
+    for (;;) {
+        if (head->njumsu == NULL) return NULL;
+        if (head->njumsu->jumsu == jumsu) return head->njumsu;
+        head = head->njumsu;
+    }
 }
 
 #endif
@@ -1700,7 +1727,7 @@ void main(void)
 // [1-4.6] link에 따라서 주어진 사번에 맞는 자료를 인쇄하는 함수
 /***********************************************************/
 
-#if 0
+#if 1
 
 int Count_Node(SCORE * head)
 {
@@ -1774,34 +1801,48 @@ void main(void)
 // [1-4.7] link에 따라서 주어진 사번의 node를 찾아서 삭제하는 함수
 /***********************************************************/
 
-#if 0
+#if 1
 
 int Delete_Id_Node(SCORE * head, int id)
 {
-
-
-
-
-
-
+    SCORE* temp = head;
+    for (int i = 0; i < MAX_ST; i++) {
+        if (head->nid == NULL) return -1;
+        if (head->nid->id > id) return -1;
+        if (head->nid->id == id) {
+            Delete_One_Jumsu_Node(temp, head->nid->jumsu, id);
+            head->nid->id = 0;
+            head->nid = head->nid->nid;
+            return 1;
+        }
+        head = head->nid;
+    }
 }
 
 void Delete_One_Jumsu_Node(SCORE * head, int jumsu, int id)
 {
-
-
-
-
-
+    for (int i = 0; i < MAX_ST; i++) {
+        if (head->njumsu == NULL) return -1;
+        if (head->njumsu->jumsu == jumsu && head->njumsu->id == id) {
+            head->njumsu = head->njumsu->njumsu;
+            return 1;
+        }
+        head = head->njumsu;
+    }
 }
 
 int Delete_Jumsu_Node(SCORE * head, int jumsu)
 {
-
-
-
-
-
+    SCORE* p = Search_Jumsu_Node(head, jumsu);
+    if (p == NULL) return -1;
+    Delete_Id_Node(head, p->id);
+    
+    for (;;) {
+        p = Search_Jumsu_Node(p, jumsu);
+        if (p == NULL) break;
+        Delete_Id_Node(head, p->id);
+    }
+    return 1;
 }
 
 #endif
