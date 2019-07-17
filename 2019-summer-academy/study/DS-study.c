@@ -2397,31 +2397,43 @@ void main(void)
 // [1-5.5] 더블 링크 사용의 장점 2, 역방향으로 일정 범위 인쇄
 /***********************************************************/
 
-#if 0
+#if 1
 
 int Print_Selected_Node(SCORE * head, int id, int num)
 {
+    int i;
+    head = Search_Id_Node(head, id);
 
+    if (head == NULL) return -1;
 
-
-
-
-
+    for (i=0;i<num;i++) {
+        if (head->next == NULL) break;
+        printf("addr=0x%.8X, ID=%d, NAME=%s, SCORE=%d, next=0x%.8X, prev=0x%.8X\n", head, head->id, head->name, head->jumsu, head->next, head->prev);
+        head = head->next;
+    }
+    
+    return i;
 }
 
 int Print_Selected_Node_Reverse(SCORE *head, int id, int num)
 {
+    int i;
+    head = Search_Id_Node(head, id);
 
+    if (head == NULL) return -1;
 
+    for (i = 0; i < num; i++) {
+        if (head->prev == NULL) break;
+        printf("addr=0x%.8X, ID=%d, NAME=%s, SCORE=%d, next=0x%.8X, prev=0x%.8X\n", head, head->id, head->name, head->jumsu, head->next, head->prev);
+        head = head->prev;
+    }
 
-
-
-
+    return i;
 }
 
 #endif
 
-#if 0
+#if 1
 
 void main(void)
 {
