@@ -1420,7 +1420,7 @@ void main(void)
 // [1-4] 배열 기반 연결 리스트 - 다중 링크
 /***********************************************************/
 
-#if 1
+#if 0
 
 /***********************************************************/
 // [1-4.1] 데이터 모델링
@@ -1881,7 +1881,7 @@ void main(void)
 // [1-4.8] node에서 요청한 자료의 수를 계수하거나 버퍼에 복사해 주는 함수
 /***********************************************************/
 
-#if 0
+#if 1
 
 int Count_Name_Node(SCORE * head, char * name)
 {
@@ -1975,14 +1975,14 @@ void main(void)
 // [1-5] 배열 기반 연결 리스트 - 더블 링크
 /***********************************************************/
 
-#if 0
+#if 1
 
 /***********************************************************/
 // [1-5.1] 기존 Linked List 방식중 그대로 사용하는 함수들
 // 단, 인쇄할 때 Prev Node 값도 인쇄하도록 추가한다
 /***********************************************************/
 
-#if 0
+#if 1
 
 #include <stdio.h>
 #include <string.h>
@@ -2064,7 +2064,7 @@ int Print_All_Data(void)
 {
 	int i;
 
-	printf("Head= 0x%.8X, Head.next=0x%.8X, Head.prev=0x%.8X\n", &Head, Head.prev, Head.next);
+	printf("Head= 0x%.8X, Head.next=0x%.8X, Head.prev=0x%.8X\n", &Head, Head.next, Head.prev);
 
 	for(i=0; i<MAX_ST; i++)
 	{
@@ -2252,15 +2252,24 @@ int Copy_Score_Node(SCORE * head, int jumsu, SCORE * buf)
 // [1-5.2] 데이터 하나를 생성하여 Linked List에 추가하는 함수
 /***********************************************************/
 
-#if 0
+#if 1
 
 int Insert_Node(SCORE * head, SCORE * d)
 {
+    if (Count_Node(head) == MAX_ST) return -1;
 
+    for (; head->next != NULL;) {
+        if (head->next->id == d->id) return -2;
+        if (head->next->id > d->id) { break; }
+        head = head->next;
+    }
 
+    d->next = head->next;
+    d->prev = head;
+    if (head->next != 0) head->next->prev = d;
+    head->next = d;
 
-
-
+    return 1;
 }
 
 #endif
@@ -2287,22 +2296,25 @@ void main(void)
 // [1-5.3] 주어진 사번의 node를 찾아서 삭제하는 함수
 /***********************************************************/
 
-#if 0
+#if 1
 
 SCORE * Search_Id_Node(SCORE * head, int id)
 {
-
-
-
-
+    for (;;) {
+        if (head->next == NULL) return NULL;
+        if (head->next->id == id) return head->next;
+        head = head->next;
+    }
 }
 
 int Delete_Node(SCORE * head, int id)
 {
-
-
-
-
+    SCORE* p = Search_Id_Node(head, id);
+    if (p == NULL) return -1;
+    p->id = 0;
+    p->prev->next = p->next;
+    if (p->next) p->next->prev = p->prev; 
+    return 1;
 }
 
 #endif
@@ -2337,15 +2349,25 @@ void main(void)
 // [1-5.4] 더블 링크 사용의 장점 1, 내림차순 검색
 /***********************************************************/
 
-#if 0
+#if 1
 
 int Print_All_Node_Reverse(SCORE * head)
 {
+    int i;
 
+    printf("Head = 0x%.8X\n", head);
 
+    if (head->next == NULL) return -1;
 
+    for (i=0;head->next != NULL;i++) {
+        head = head->next;
+    }
+    for (;head->prev != NULL;) {
+        printf("addr=0x%.8X, ID=%d, NAME=%s, SCORE=%d, next=0x%.8X, prev=0x%.8X\n",head, head->id, head->name, head->jumsu, head->next, head->prev);
+        head = head->prev;
+    }
 
-
+    return i;
 }
 
 #endif
