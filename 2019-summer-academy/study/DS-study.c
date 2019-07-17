@@ -2470,7 +2470,7 @@ void main(void)
 // [1-6] 선형 리스트 - stack
 /***********************************************************/
 
-#if 1
+#if 0
 
 #include <stdio.h>
 
@@ -2592,13 +2592,13 @@ void main(void)
 // [1-7] 선형 리스트 - Linear Queue
 /***********************************************************/
 
-#if 0
+#if 1
 
 #include <stdio.h>
 
-#define MAX_Q			5
-#define Q_EMPTY		0
-#define Q_FULL			MAX_Q
+#define MAX_Q 5
+#define Q_EMPTY	 0
+#define Q_FULL MAX_Q
 
 int In_Queue(int data);
 int Out_Queue(int *p);
@@ -2608,22 +2608,30 @@ int Count_Empty_Data_Queue(void);
 
 int a[MAX_Q+1] = {1,2,3,4,5,6};
 int Queue[MAX_Q];
-int Wrptr = Q_EMPTY;
-int Rdptr = Q_EMPTY;
+int Wrptr = Q_EMPTY; //자료가 쓰이는 위치
+int Rdptr = Q_EMPTY; //자료를 읽는 위치
 
-int In_Queue(int data)
+int In_Queue(int data) //inqueue
 {
-
-
-
-
+    if (Wrptr == Q_FULL) {
+        if (Rdptr == Q_EMPTY) { //자료가 가득차있는 경우
+            return -1;
+        }
+        for (int i = 0; i < (Wrptr - Rdptr); i++) {
+            Queue[i] = Queue[Rdptr + i];
+        }
+        Wrptr -= Rdptr;
+        Rdptr = Q_EMPTY;
+    }
+    Queue[Wrptr++] = data;
+    return 1;
 }
 
-int Out_Queue(int *p)
+int Out_Queue(int *p) // dequeue
 {
-
-	
-	
+    if (Rdptr == Wrptr) return -2; //읽을 자료가 없는 경우
+    *p = Queue[Rdptr++];
+    return 1;
 }
 
 int Print_Queue(void)
