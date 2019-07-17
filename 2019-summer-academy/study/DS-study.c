@@ -1975,7 +1975,7 @@ void main(void)
 // [1-5] 배열 기반 연결 리스트 - 더블 링크
 /***********************************************************/
 
-#if 1
+#if 0
 
 /***********************************************************/
 // [1-5.1] 기존 Linked List 방식중 그대로 사용하는 함수들
@@ -2470,7 +2470,7 @@ void main(void)
 // [1-6] 선형 리스트 - stack
 /***********************************************************/
 
-#if 0
+#if 1
 
 #include <stdio.h>
 
@@ -2490,30 +2490,31 @@ int Sptr = STACK_EMPTY;
 
 int Push_Stack(int data)
 {
-
-
-
-
+    if (Sptr == STACK_FULL) return -1;
+    Stack[Sptr] = data;
+    Sptr--;
+    return 1;
 }
 
 int Pop_Stack(int *p)
 {
-
-
-
-
+    int data;
+    if (Sptr == STACK_EMPTY) return -1;
+    data = Stack[Sptr];
+    Sptr++;
+    return data;
 }
 
 int Print_Stack(void)
 {
 	int i;
 
-	for(i = Sptr + 1; i < MAX_STACK; i++)
+	for(i = Sptr; i < MAX_STACK; i++)
 	{
 		printf("STACK[%d] = %d\n", i, Stack[i]);
 	}
 
-	return MAX_STACK - Sptr - 1;
+	return MAX_STACK - Sptr;
 }
 
 int Count_Full_Data_Stack(void)
