@@ -2874,7 +2874,7 @@ void main(void)
 // [2-1] 힙 기반 Linked List
 /***********************************************************/
 
-#if 1
+#if 0
 
 /***********************************************************/
 // [2-1.1] 기존 배열 기반 linked list 방식중 그대로 사용하는 함수들
@@ -3211,13 +3211,13 @@ void main(void)
 // [2-2] 힙 기반 연결 리스트 - 다중 링크
 /***********************************************************/
 
-#if 0
+#if 1
 
 /***********************************************************/
 // 기존 배열 기반 연결 리스트와 동일하게 사용되는 함수들 
 /***********************************************************/
 
-#if 0
+#if 1
 
 #include <stdio.h>
 #include <string.h>
@@ -3318,7 +3318,7 @@ int Print_All_Jumsu_Node(SCORE * head)
 	for(;;)
 	{
 		if(head->njumsu == (SCORE *)0x0) return i;
-		printf("addr = 0x%.8X, ID=%d, NAME=%s, SCORE=%d, nid = 0x%.8X\n", head->njumsu, head->njumsu->id, head->njumsu->name, head->njumsu->jumsu, head->njumsu->njumsu);
+		printf("addr = 0x%.8X, ID=%d, NAME=%s, SCORE=%d, njumsu = 0x%.8X\n", head->njumsu, head->njumsu->id, head->njumsu->name, head->njumsu->jumsu, head->njumsu->njumsu);
 		head = head->njumsu;
 		i++;
 	}
@@ -3465,16 +3465,35 @@ int Copy_Score_Node(SCORE * head, int jumsu, SCORE * buf)
 // [2-2.1] 데이터 하나를 생성하여 Linked List에 추가하는 함수  (calloc 사용)
 /***********************************************************/
 
-#if 0
+#if 1
 
 int Insert_Node(SCORE * head, SCORE * d)
 {
+    SCORE* temp = head;
+    SCORE* p; //할당받을 주소
+    for (;;) {
+        if (head->nid == NULL || d->id < head->nid->id) {
+            p = calloc(1, sizeof(SCORE));
+            if (p == NULL) return -1;
+            *p = *d;
+            p->nid = head->nid;
+            head->nid = p;
+            break;
+        }
+        if (head->nid->id == d->id) return -2;
+        head = head->nid;
+    }
 
+    head = temp;
 
-
-
-
-
+    for (;;) {
+        if (head->njumsu == NULL || d->jumsu <= head->njumsu->jumsu) {
+            p->njumsu = head->njumsu;
+            head->njumsu = p;
+            return 1;
+        }
+        head = head->njumsu;
+    }
 }
 
 #endif
@@ -3498,33 +3517,46 @@ void main(void)
 // [2-2.2] link에 따라서 주어진 사번의 node를 찾아서 삭제하는 함수 (free 사용)
 /***********************************************************/
 
-#if 0
+#if 1
 
 int Delete_Id_Node(SCORE * head, int id)
 {
-
-
-
-
-
+    SCORE* p = head;
+    for (;;) {
+        if (head->nid == NULL || head->nid->id > id) return -1;
+        if (head->nid->id == id) {
+            //점수 노드도 해제
+            Delete_One_Jumsu_Node(p, head->nid->jumsu, id);
+            p = head->nid;
+            head->nid = head->nid->nid;
+            free(p);
+            return 1;
+        }
+        head = head->nid;
+    }
 }
 
 void Delete_One_Jumsu_Node(SCORE * head, int jumsu, int id)
 {
-
-
-
-
-
+    if (head->njumsu == NULL) return;
+    for (;;) {
+        if (head->njumsu->jumsu == jumsu && head->njumsu->id == id) {
+            head->njumsu = head->njumsu->njumsu;
+            return;
+        }
+        head = head->njumsu;
+    }
 }
 
 int Delete_Jumsu_Node(SCORE * head, int jumsu)
 {
-
-
-
-
-
+    SCORE* p;
+    for (;;) {
+        p = Search_Jumsu_Node(head, jumsu);
+        if (p == NULL) return -1;
+        Delete_Id_Node(head, p->id);
+        return 1;
+    }
 }
 
 #endif
