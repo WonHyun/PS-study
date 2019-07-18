@@ -3211,7 +3211,7 @@ void main(void)
 // [2-2] 힙 기반 연결 리스트 - 다중 링크
 /***********************************************************/
 
-#if 1
+#if 0
 
 /***********************************************************/
 // 기존 배열 기반 연결 리스트와 동일하게 사용되는 함수들 
@@ -3595,13 +3595,13 @@ void main(void)
 // [2-2.3] 힙 기반 연결 리스트 - 더블 링크
 /***********************************************************/
 
-#if 0
+#if 1
 
 /***********************************************************/
 // [2-2.3] 기존 Linked List 방식중 그대로 사용하는 함수들
 /***********************************************************/
 
-#if 0
+#if 1
 
 #include <stdio.h>
 #include <string.h>
@@ -3881,17 +3881,27 @@ int Print_Selected_Node_Reverse(SCORE *head, int id, int num)
 // [2-2.3] 데이터 하나를 생성하여 Linked List에 추가하는 함수 (calloc 사용)
 /***********************************************************/
 
-#if 0
+#if 1
 
 int Insert_Node(SCORE * head, SCORE * d)
 {
-
-
-
-
-
-
-
+    SCORE* p;
+    for (;;) {
+        if (head->next == NULL || head->next->id > d->id) {
+            p = calloc(1, sizeof(SCORE));
+            if (p == NULL) return -1;
+            *p = *d;
+            //head 다음에 삽입
+            p->next = head->next;
+            p->prev = head;
+            //head의 다음노드가 존재할때 다음노드의 prev를 p로 바꾸어준다.
+            if (head->next) head->next->prev = p;
+            head->next = p;
+            return 1;
+        }
+        if (head->next->id == d->id) return -1;
+        head = head->next;
+    }
 }
 
 #endif
@@ -3915,16 +3925,19 @@ void main(void)
 // [2-2.4] 주어진 사번의 node를 찾아서 삭제하는 함수
 /***********************************************************/
 
-#if 0
+#if 1
 
 int Delete_Node(SCORE * head, int id)
 {
-
-
-
-
-
-
+    SCORE* temp = Search_Id_Node(head, id);
+    if (temp == NULL) return -1;
+    temp->prev->next = temp->next;
+    //삭제하려는 노드 다음노드가 존재하면
+    //다음 노드의 이전노드를 삭제하려는 노드의 이전값으로 바꿔준다.
+    // pre -> (target) -> next ==> pre -> next
+    if (temp->next) temp->next->prev = temp->prev;
+    free(temp);
+    return 1;
 }
 
 #endif
