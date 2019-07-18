@@ -3595,7 +3595,7 @@ void main(void)
 // [2-2.3] 힙 기반 연결 리스트 - 더블 링크
 /***********************************************************/
 
-#if 1
+#if 0
 
 /***********************************************************/
 // [2-2.3] 기존 Linked List 방식중 그대로 사용하는 함수들
@@ -3976,7 +3976,7 @@ void main(void)
 // [2-3.1] 힙 기반 stack
 /***********************************************************/
 
-#if 0
+#if 1
 
 #include <stdio.h>
 #include <malloc.h>
@@ -3987,7 +3987,7 @@ typedef struct _stk
 	struct _stk * next; 
 }STACK;
 
-STACK * Sptr = (STACK *)0;
+STACK * Sptr = (STACK *)0; //현재 스택의 top
 STACK a[10] = {{1,0},{2,0},{3,0},{4,0},{5,0},{6,0},{7,0},{8,0},{9,0},{10,0}};
 
 int Push_Stack(STACK * data);
@@ -3997,34 +3997,50 @@ int Count_Full_Data_Stack(void);
 
 int Push_Stack(STACK *data)
 {
-
-
-
-
+    STACK* p = calloc(1, sizeof(STACK));
+    if (p == NULL) return -1;
+    *p = *data;
+    p->next = Sptr; //해당 자료보다 아래에있는 요소 (pop하면 가리킬 요소)
+    Sptr = p;
+    return 1;
 }
 
 int Pop_Stack(STACK *p)
 {
-
-
-
-
+    STACK* temp = Sptr;
+    if (Sptr == NULL) return -1; //스택이 빈 경우
+    *p = *Sptr; //top의 데이터를 전달
+    Sptr = Sptr->next; //스택 top을 현재 top에서 아래에 있는 요소를 가리킴
+    free(temp); //이전 top의 요소를 삭-제
+    return 1;
 }
 
 int Print_Stack(void)
 {
-
-
-
-
+    STACK* p = Sptr;
+    int i;
+    if (Sptr == NULL) return -1;
+    for (i=0;p != NULL;i++) {
+        //printf("%d ",p->num);
+        printf("[%d] addr=0x%.8X, num=%d, next=0x%.8X\n", i, p, p->num, p->next);
+        p = p->next;
+    }
+    printf("\n");
+    return i;
 }
 
 int Count_Full_Data_Stack(void)
 {
+    STACK* p = Sptr;
+    int i=0;
 
+    //for (i=0;p != NULL;i++) {p = p->next;}
+    while(p != NULL) {
+        p = p->next;
+        i++;
+    }
 
-
-
+    return i;
 }
 
 void main(void)
