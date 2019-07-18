@@ -3976,7 +3976,7 @@ void main(void)
 // [2-3.1] 힙 기반 stack
 /***********************************************************/
 
-#if 1
+#if 0
 
 #include <stdio.h>
 #include <malloc.h>
@@ -4084,7 +4084,7 @@ void main(void)
 // [2-3.2] 힙 기반  Linear Queue
 /***********************************************************/
 
-#if 0
+#if 1
 
 #include <stdio.h>
 #include <malloc.h>
@@ -4095,8 +4095,8 @@ typedef struct _que
 	struct _que * next; 
 }QUEUE;
 
-QUEUE * Wrptr = (QUEUE *)0;;
-QUEUE * Rdptr = (QUEUE *)0;;
+QUEUE * Wrptr = (QUEUE *)0;
+QUEUE * Rdptr = (QUEUE *)0;
 
 QUEUE a[10] = {{1,0},{2,0},{3,0},{4,0},{5,0},{6,0},{7,0},{8,0},{9,0},{10,0}};
 
@@ -4107,34 +4107,48 @@ int Count_Full_Data_Queue(void);
 
 int In_Queue(QUEUE * data)
 {
-
-
-
-
+    QUEUE* p = calloc(1, sizeof(QUEUE));
+    if (p == NULL) return -1;
+    *p = *data;
+    p->next = NULL;
+    if (Wrptr) Wrptr->next = p;
+    Wrptr = p;
+    if (Rdptr == NULL) Rdptr = p;
+    return 1;
 }
 
 int Out_Queue(QUEUE * p)
 {
-
-
-
-
+    QUEUE* temp = Rdptr;
+    if (Rdptr == NULL) return -1;
+    *p = *Rdptr;
+    Rdptr = Rdptr->next;
+    if (Rdptr == NULL) Wrptr = NULL;
+    free(temp);
+    return 1;
 }
 
 int Print_Queue(void)
 {
-
-
-
-
+    int i = 0;
+    QUEUE* temp = Rdptr;
+    while (temp)
+    {
+        printf("[%d] addr=0x%.8X, num=%d, next=0x%.8X\n", i++, temp, temp->num, temp->next);
+        temp = temp->next;
+    }
+    return i;
 }
 
 int Count_Full_Data_Queue(void)
 {
-
-
-
-
+    int i = 0;
+    QUEUE* temp = Rdptr;
+    while (temp) {
+        temp = temp->next;
+        i++;
+    }
+    return i;
 }
 
 void main(void)
