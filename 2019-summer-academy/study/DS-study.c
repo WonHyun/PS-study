@@ -2592,7 +2592,7 @@ void main(void)
 // [1-7] 선형 리스트 - Linear Queue
 /***********************************************************/
 
-#if 1
+#if 0
 
 #include <stdio.h>
 
@@ -2874,7 +2874,7 @@ void main(void)
 // [2-1] 힙 기반 Linked List
 /***********************************************************/
 
-#if 0
+#if 1
 
 /***********************************************************/
 // [2-1.1] 기존 배열 기반 linked list 방식중 그대로 사용하는 함수들
@@ -3104,16 +3104,24 @@ int Copy_Score_Node(SCORE * head, int jumsu, SCORE * buf)
 // [2-1.2] 전달받은 데이터를 힙에 생성하고 Linked List에 추가하는 함수 (calloc 사용)
 /***********************************************************/
 
-#if 0
+#if 1
 
 int Insert_Node(SCORE * head, SCORE * d)
 {
+    SCORE* p;
+    for (;;) {
+        if (head->next == NULL || d->id < head->next->id) {
+            p = calloc(1, sizeof(SCORE));
+            if (p == NULL) return -1; // 할당이 실패한 경우
+            *p = *d;
 
-
-
-
-
-
+            p->next = head->next;
+            head->next = p;
+            return 1;
+        }
+        if (d->id == head->next->id) return -2;
+        head = head->next;
+    }
 }
 
 #endif
@@ -3153,18 +3161,25 @@ void main(void)
 // [2-1.3] 전달받은 사번의 자료를 링크와 힙에서 삭제하는 함수 (free 사용)
 /***********************************************************/
 
-#if 0
+#if 1
 
 int Delete_Node(SCORE * head, int id)
 {
+    SCORE* p;
+    if (head->next == NULL) return -1;
+    p = head;
+    head = head->next;
 
-
-
-
-
-
-
-
+    for (;;) {
+        if (id == head->id) {
+            p->next = head->next;
+            free(head);
+            return 1;
+        }
+        if (head->next == NULL || id < head->id) return -1;
+        p = head;
+        head = head->next;
+    }
 }
 
 #endif
