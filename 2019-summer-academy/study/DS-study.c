@@ -4795,7 +4795,7 @@ void main(void)
 // [3-2] Hash Table
 /***********************************************************/
 
-#if 1
+#if 0
 
 /***********************************************************/
 // [3-2.1] Hash Table을 위한 기본 함수들
@@ -4872,7 +4872,7 @@ void Init_Hash_Table(void)
 
 #endif
 
-#if 1
+#if 0
 
 void Print_All_Data(void)
 {
@@ -5324,13 +5324,13 @@ void main(void)
 // [3-2.9] Hash Table => Chainning 방법의 구현
 /***********************************************************/
 
-#if 0
+#if 1
 
 /***********************************************************/
 // [3-2.9] Hash Table을 위한 기본 함수들
 /***********************************************************/
 
-#if 0
+#if 1
 
 #include <stdio.h>
 #include <string.h>
@@ -5424,12 +5424,21 @@ void Print_All_Data(void)
 
 int Insert_Data(SCORE * d)
 {
+    SCORE* p;
+    SCORE* q;
 
+    p = &Hash_table[Get_Hash_Key(d->id)];
+    q = calloc(1, sizeof(SCORE));
+    if (q == NULL) return -1;
+    *q = *d;
 
-
-
-
-
+    for (;;) {
+        if (p->next == NULL) break;
+        p = p->next;
+    }
+    p->next = q;
+    q->next = NULL;
+    return 1;
 }
 
 #endif
@@ -5460,11 +5469,22 @@ void main(void)
 
 int Delete_Data(int id)
 {
+    SCORE* p;
+    SCORE* prev;
 
+    prev = &Hash_table[Get_Hash_Key(id)];
+    p = prev->next;
 
-
-
-
+    for (;;) {
+        if (p == NULL) return -1;
+        if (p->id == id) {
+            prev->next = p->next;
+            free(p);
+            return 1;
+        }
+        prev = p;
+        p = p->next;
+    }
 }
 
 #endif
@@ -5503,11 +5523,13 @@ void main(void)
 
 SCORE * Search_Data(int id)
 {
-
-
-
-
-
+    SCORE* p;
+    p = Hash_table[Get_Hash_Key(id)].next;
+    for (;;) {
+        if (p->id == id) return p;
+        if (p->next == NULL) return NULL;
+        p = p->next;
+    }
 }
 
 #endif
@@ -5542,3 +5564,67 @@ void main(void)
 // 완성된 위의 예제를 복사하여 처음부터 모두 재설계하라
 /***********************************************************/
 
+#if 1
+
+int Insert_Data(SCORE * d)
+{
+    SCORE* p;
+    SCORE* q;
+
+    p = &Hash_table[Get_Hash_Key(d->id)];
+    q = calloc(1, sizeof(SCORE));
+    if (q == NULL) return -1;
+    *q = *d;
+
+    for (;;) {
+        if (p->next == NULL || q->id < p->next->id) {
+            q->next = p->next;
+            p->next = q;
+            return 1;
+        }
+        if (q->id == p->next->id) return -2;
+        p = p->next;
+    }
+}
+
+#endif
+
+#if 1
+
+int Delete_Data(int id)
+{
+    SCORE* p;
+    SCORE* prev;
+
+    prev = &Hash_table[Get_Hash_Key(id)];
+    p = prev->next;
+
+    while (p) {
+        if (p->id == id) {
+            prev->next = p->next;
+            free(p);
+            return 1;
+        }
+        if (p->id > id) return -1;
+        prev = p;
+        p = p->next;
+    }
+    return -1;
+}
+
+#endif
+
+#if 1
+
+SCORE * Search_Data(int id)
+{
+    SCORE* p;
+    p = Hash_table[Get_Hash_Key(id)].next;
+    for (;;) {
+        if (p->id == id) return p;
+        if (p->next == NULL || p->id > id) return NULL;
+        p = p->next;
+    }
+}
+
+#endif
