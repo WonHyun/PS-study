@@ -4204,7 +4204,7 @@ void main(void)
 // [3-1] 힙 기반 비선형 자료구조 - 이진 트리
 /***********************************************************/
 
-#if 0
+#if 1
 
 /***********************************************************/
 // [3-1.1] 이진 Tree의 인쇄
@@ -4280,7 +4280,7 @@ void Print_All_Node3(struct node *p)
 // [3-1.2] 이진 트리를 위한 기본 함수들
 /***********************************************************/
 
-#if 0
+#if 1
 
 #include <stdio.h>
 #include <string.h>
@@ -4351,7 +4351,7 @@ void Print_All_Node(SCORE * p)
 // [3-1.3] 데이터 하나를 생성하여 Linked List에 추가하는 함수 (calloc 사용)
 /***********************************************************/
 
-#if 0
+#if 1
 
 SCORE * Creat_Node(SCORE * d)
 {
@@ -4368,17 +4368,41 @@ SCORE * Creat_Node(SCORE * d)
 
 int Insert_Node(SCORE * head, SCORE * d)
 {
-
-
-
-
-
-
+    SCORE* p = Creat_Node(d);
+    if (p == NULL) return -1;
+    if (head == NULL) {
+        Root = p;
+        return 1;
+    }
+    for (;;) {
+        if (head->id == d->id) {
+            free(p);
+            return -2;
+        }
+        if (head->id > d->id) {
+            //left
+            if (head->left) head = head->left; //left의 끝까지 감
+            else {
+                head->left = p;
+                //p->parent = head; // 부모를 찾는 경우
+                return 1;
+            }
+        }
+        else {
+            //right
+            if (head->right) head = head->right; //left의 끝까지 감
+            else {
+                head->right = p;
+                //p->parent = head; // 부모를 찾는 경우
+                return 1;
+            }
+        }
+    }
 }
 
 #endif
 
-#if 0
+#if 1
 
 void main(void)
 {
@@ -4398,15 +4422,18 @@ void main(void)
 // [3-1.4] 주어진 사번의 node를 찾아서 노드의 주로를 리턴하는 함수
 /***********************************************************/
 
-#if 0
+#if 1
 
 SCORE * Search_Node(SCORE * head, int id)
 {
-	
-
-
-
-
+    if (head == NULL) return NULL;
+    if (head->id > id) {
+        head = head->left;
+    }
+    else if (head->id < id) {
+        head = head->right;
+    }
+    else return head;
 }
 
 #endif
@@ -4460,7 +4487,7 @@ void Delete_All_Node(SCORE * p)
 
 #endif
 
-#if 0
+#if 1
 
 // 삭제할 대상 노드가 leaf인 경우 삭제 함수
 // main 함수에서 "자식 없는 노드의 삭제" 부분만 실험
@@ -4477,9 +4504,6 @@ int Delete_Node(SCORE * head, int id)
 	// 삭제할 노드가 leaf 노드 상태의 Root일 경우 Root에 NULL 복사
 	// Root가 아니면 삭제 노드를 연결하고 있는 부모의 left 또는 right에 NULL 대입
 
-	
-	
-	
 	
 	
 	free(r);
@@ -5324,7 +5348,7 @@ void main(void)
 // [3-2.9] Hash Table => Chainning 방법의 구현
 /***********************************************************/
 
-#if 1
+#if 0
 
 /***********************************************************/
 // [3-2.9] Hash Table을 위한 기본 함수들
@@ -5564,7 +5588,9 @@ void main(void)
 // 완성된 위의 예제를 복사하여 처음부터 모두 재설계하라
 /***********************************************************/
 
-#if 1
+#if 0
+
+#if 0
 
 int Insert_Data(SCORE * d)
 {
@@ -5589,7 +5615,7 @@ int Insert_Data(SCORE * d)
 
 #endif
 
-#if 1
+#if 0
 
 int Delete_Data(int id)
 {
@@ -5614,7 +5640,7 @@ int Delete_Data(int id)
 
 #endif
 
-#if 1
+#if 0
 
 SCORE * Search_Data(int id)
 {
@@ -5626,5 +5652,7 @@ SCORE * Search_Data(int id)
         p = p->next;
     }
 }
+
+#endif
 
 #endif
