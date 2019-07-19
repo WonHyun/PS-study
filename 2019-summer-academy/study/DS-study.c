@@ -4084,7 +4084,7 @@ void main(void)
 // [2-3.2] 힙 기반  Linear Queue
 /***********************************************************/
 
-#if 1
+#if 0
 
 #include <stdio.h>
 #include <malloc.h>
@@ -4095,8 +4095,8 @@ typedef struct _que
 	struct _que * next; 
 }QUEUE;
 
-QUEUE * Wrptr = (QUEUE *)0;
-QUEUE * Rdptr = (QUEUE *)0;
+QUEUE * Wrptr = (QUEUE *)0; //큐의 맨뒤 (가장나중에 출력되는 데이터)를 가리킴
+QUEUE * Rdptr = (QUEUE *)0; //큐의 가장앞, pop할때 출력되는 값 가리킴
 
 QUEUE a[10] = {{1,0},{2,0},{3,0},{4,0},{5,0},{6,0},{7,0},{8,0},{9,0},{10,0}};
 
@@ -4795,13 +4795,13 @@ void main(void)
 // [3-2] Hash Table
 /***********************************************************/
 
-#if 0
+#if 1
 
 /***********************************************************/
 // [3-2.1] Hash Table을 위한 기본 함수들
 /***********************************************************/
 
-#if 0
+#if 1
 
 #include <stdio.h>
 #include <string.h>
@@ -4872,7 +4872,7 @@ void Init_Hash_Table(void)
 
 #endif
 
-#if 0
+#if 1
 
 void Print_All_Data(void)
 {
@@ -4894,12 +4894,19 @@ void Print_All_Data(void)
 
 int Insert_Data(SCORE * d)
 {
+    int key = 0;
+    int i;
+    key = Get_Hash_Key(d->id);
 
-
-
-
-
-
+    for (i = 0; i < MAX_ST; i+=STEP) {
+        if (Hash_table[key].id == -1) {
+            //해당 주소의 값이 비었으면 삽입
+            Hash_table[key] = d[0];
+            return 1;
+        }
+        key = (key + STEP) % MAX_ST;
+    }
+    return -1;
 }
 
 #endif
@@ -4926,16 +4933,20 @@ void main(void)
 // [3-2.3] Search
 /***********************************************************/
 
-#if 0
+#if 1
 
 SCORE * Search_Data(int id)
 {
+    int i;
+    int key = Get_Hash_Key(id);
 
-
-
-
-
-
+    for (i = 0; i < MAX_ST; i += STEP) {
+        if (Hash_table[key].id == id) {
+            return &Hash_table[key];
+        }
+        key = (key + STEP) % MAX_ST;
+    }
+    return 0;
 }
 
 #endif
@@ -4990,14 +5001,20 @@ int Delete_Data(int id)
 // 새로은 Insert 함수가 설계되면 [3-3.2]에서 설계된 Insert_Data 함수는 삭제한다
 /***********************************************************/
 
-#if 0
+#if 1
 
+//-2를 넣는것은 해당요소가 없을때 다음요소를 찾지 않게 하기 위함
+//해당 위치에 비어있고 다른곳에 있다 -> -1 (처음부터 비어있음)
+//해당 위치에서 데이터가 삭제됬다 -> -2
+//두개 구분하려고 이렇게 함
 int Delete_Data(int id)
 {
+    SCORE* p;
 
-
-
-
+    p = Search_Data(id);
+    if (p == (SCORE*)0) return -1;
+    p->id = -2;
+    return 1;
 }
 
 int Insert_Data(SCORE * d)
