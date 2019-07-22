@@ -53,6 +53,7 @@ int main() {
     scanf("%d",&t);
     for (int k = 0; k < t; k++) {
         int ord, ret;
+        rp = wp = 0;
         for (int i = 0; i < 10; i++) cnt[i] = 0;
 
         scanf("%d %d", &N, &M);
