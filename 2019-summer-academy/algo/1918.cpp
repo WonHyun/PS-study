@@ -1,5 +1,5 @@
 #include "test-algo.h"
-
+#if (PNUM == 1918)
 //수식 계산기, 간단 스택버전
 
 using namespace std;
@@ -49,3 +49,4 @@ int main(void)
 
     return 0;
 }
+#endif
