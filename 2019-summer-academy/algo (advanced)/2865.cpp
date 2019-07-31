@@ -11,6 +11,7 @@ int chk[100]; // 한 건물이 선택한 부지는 다른 건물이 선택할 �
 
 void dfs(int no, int sum)
 {
+    if (sum > min) return;
     if (no >= n) {
         if (sum < minCost) minCost = sum;
         return;
