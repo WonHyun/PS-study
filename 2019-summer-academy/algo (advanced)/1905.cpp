@@ -10,6 +10,13 @@ int num[21];
 int comb[21];
 bool isRight;
 
+void disp() {
+    for (int i = 0; i < n; i++) {
+        if (comb[i]) cout << comb[i] << " ";
+    }
+    cout << endl;
+}
+
 void dfs(int no)
 {
     if (no >= n) {
@@ -17,13 +24,29 @@ void dfs(int no)
         for (int i = 0; i < n; i++) {
             if (comb[i]) sum += comb[i];
         }
-        if (sum == k) isRight = true;
+        if (sum == k) {
+            //disp();
+            isRight = true;
+        } 
         return;
     }
     comb[no] = num[no];
     dfs(no + 1);
     comb[no] = 0;
     dfs(no + 1);
+}
+
+// 가지치기 버전, 그때의 합을 관리한다.
+
+void dfs(int no, int sum)
+{
+    if (isRight) return;
+    if (no >= n) {
+        if (sum == k) isRight = true;
+        return;
+    }
+    dfs(no + 1, sum + num[no]);
+    dfs(no + 1, sum);
 }
 
 int main(void)
