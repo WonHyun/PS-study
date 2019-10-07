@@ -1,7 +1,5 @@
 #include "../test-prog.h"
-//#if (PNUM == lv03-4)
-
-#if 0
+#if (PNUM == lv03-4)
 
 // 4단 고음 문제
 
